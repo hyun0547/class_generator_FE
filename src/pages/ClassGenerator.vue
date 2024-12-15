@@ -1,15 +1,26 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item">
-
-    
-    <form action="http://localhost:8080/" method="POST">
       <div class="md-card md-theme-default">
         <div class="md-card-header" data-background-color="green">
           <h4 class="title">클래스 생성</h4>
           <p class="category">필드를 추가하고 값을 입력하세요</p>
         </div>
         <div class="md-card-content">
+          <!-- 클래스 이름 입력 -->
+          <div class="md-layout-item md-small-size-100 md-size-33">
+            <div class="md-field md-theme-default">
+              <label :for="'model-name'"></label>
+              <input
+                id="model-name"
+                type="text"
+                class="md-input"
+                placeholder="클래스 이름"
+                v-model="modelName"
+                required
+              />
+            </div>
+          </div>
           <div v-for="(field, index) in fields" :key="index" class="md-layout">
             <!-- Select Box -->
             <div class="md-layout-item md-small-size-100 md-size-33">
@@ -20,7 +31,6 @@
                   v-model="field.selectedType"
                   class="md-input"
                   @change="enableInput(index)"
-                  name="fieldType"
                   required
                 >
                   <option value="" disabled>자료형을 선택하세요</option>
@@ -39,7 +49,6 @@
                   :disabled="!field.isInputEnabled"
                   v-model="field.value"
                   :placeholder="field.isInputEnabled ? `값을 입력하세요.` : `자료형을 선택해주세요.`"
-                  name="fieldValue"
                   required
                 />
               </div>
@@ -48,7 +57,7 @@
             <div class="md-layout-item text-right">
               <button type="button" class="md-button md-raised md-danger md-theme-default" @click="removeField(index)" :disabled="fields.length === 1">
                 <div class="md-ripple">
-                  <div class="md-button-content">삭제</div> 
+                  <div class="md-button-content">삭제</div>
                 </div>
               </button>
             </div>
@@ -57,29 +66,31 @@
           <div class="md-layout-item text-right">
             <button type="button" class="md-button md-raised md-info md-theme-default" @click="addField">
               <div class="md-ripple">
-                <div class="md-button-content">필드 추가</div> 
+                <div class="md-button-content">필드 추가</div>
               </div>
             </button>
           </div>
           <!-- Submit Button -->
           <div class="md-layout-item">
-            <button type="submit" class="md-button md-raised md-success md-theme-default">
+            <button type="button" class="md-button md-raised md-success md-theme-default" @click="submitForm">
               <div class="md-ripple">
-                <div class="md-button-content">생성</div> 
+                <div class="md-button-content">생성</div>
               </div>
             </button>
           </div>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
+      modelName: "", // 클래스 이름
       types: ["String", "Integer", "Double", "Boolean", "Long", "Short", "Byte", "Character"],
       fields: [
         { selectedType: "", value: "", isInputEnabled: false }
@@ -96,6 +107,29 @@ export default {
     removeField(index) {
       if (this.fields.length > 1) {
         this.fields.splice(index, 1);
+      }
+    },
+    async submitForm() {
+      try {
+        let result = {};
+
+        this.fields.forEach(field => {
+          result[field.value] = field.selectedType;
+        });
+
+        const payload = {
+          modelName: this.modelName,
+          fields: result
+        };
+        
+        const response = await axios.post("http://localhost:8080/", payload, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        });
+        alert("생성 완료");
+      } catch (error) {
+        alert("error");
       }
     }
   }
