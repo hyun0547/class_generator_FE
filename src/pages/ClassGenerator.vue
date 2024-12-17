@@ -86,6 +86,7 @@
 
 <script>
 import axios from "axios";
+import { API_BASE_URL } from "@/config/config.js";
 
 export default {
   data() {
@@ -122,7 +123,7 @@ export default {
           fields: result
         };
         
-        const response = await axios.post("http://localhost:8080/", payload, {
+        const response = await axios.post(API_BASE_URL, payload, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
