@@ -126,7 +126,15 @@ export default {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
+          responseType: 'arraybuffer'
         });
+
+        const blob = new Blob([response.data], { type: 'application/octet-stream' });
+
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${this.modelName}.java`;
+        link.click();
         alert("생성 완료");
       } catch (error) {
         alert("error");
