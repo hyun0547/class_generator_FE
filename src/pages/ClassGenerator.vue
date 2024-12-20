@@ -7,6 +7,91 @@
           <p class="category">필드를 추가하고 값을 입력하세요</p>
         </div>
         <div class="md-card-content">
+          <!-- DB 설정 입력 필드들 -->
+          <!-- <div class="md-layout-item md-small-size-100 md-size-50">
+            <div class="md-field md-theme-default">
+              <label :for="'db-type'"></label>
+              <input
+                id="db-type"
+                type="text"
+                class="md-input"
+                placeholder="DB 종류 (ex: MySQL, PostgreSQL)"
+                v-model="dbType"
+                required
+              />
+            </div>
+          </div> -->
+
+          <div class="md-layout-item md-small-size-100 md-size-50">
+            <div class="md-field md-theme-default">
+              <label :for="'host'"></label>
+              <input
+                id="host"
+                type="text"
+                class="md-input"
+                placeholder="DB 호스트"
+                v-model="host"
+                required
+              />
+            </div>
+            
+          </div>
+
+          <div class="md-layout-item md-small-size-100 md-size-50">
+            <div class="md-field md-theme-default">
+              <label :for="'port'"></label>
+              <input
+                id="port"
+                type="number"
+                class="md-input"
+                placeholder="DB 포트 (기본 3306)"
+                v-model="port"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="md-layout-item md-small-size-100 md-size-50">
+            <div class="md-field md-theme-default">
+              <label :for="'database-name'"></label>
+              <input
+                id="database-name"
+                type="text"
+                class="md-input"
+                placeholder="데이터베이스 이름"
+                v-model="databaseName"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="md-layout-item md-small-size-100 md-size-50">
+            <div class="md-field md-theme-default">
+              <label :for="'username'"></label>
+              <input
+                id="username"
+                type="text"
+                class="md-input"
+                placeholder="사용자 이름"
+                v-model="username"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="md-layout-item md-small-size-100 md-size-50">
+            <div class="md-field md-theme-default">
+              <label :for="'password'"></label>
+              <input
+                id="password"
+                type="password"
+                class="md-input"
+                placeholder="비밀번호"
+                v-model="password"
+                required
+              />
+            </div>
+          </div>
           <!-- 클래스 이름 입력 -->
           <div class="md-layout-item md-small-size-100 md-size-33">
             <div class="md-field md-theme-default">
@@ -92,6 +177,12 @@ export default {
   data() {
     return {
       modelName: "", // 클래스 이름
+      dbType: "",     // DB 종류
+      host: "",       // DB 호스트
+      port: "",       // DB 포트
+      databaseName: "", // DB 이름
+      username: "",   // 사용자 이름
+      password: "",   // 비밀번호
       types: ["String", "Integer", "Double", "Boolean", "Long", "Short", "Byte", "Character"],
       fields: [
         { selectedType: "", value: "", isInputEnabled: false }
@@ -119,10 +210,15 @@ export default {
         });
 
         const payload = {
-          modelName: this.modelName,
-          fields: result
+          modelName: this.modelName,fields: result,
+          dbType: this.dbType,
+          host: this.host,
+          port: this.port,
+          databaseName: this.databaseName,
+          username: this.username,
+          password: this.password
         };
-        
+
         const response = await axios.post(API_BASE_URL, payload, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
