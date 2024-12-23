@@ -2,6 +2,7 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
 import ClassGenerator from "@/pages/ClassGenerator.vue";
+import UserProfile from "@/pages/UserProfile.vue";
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
         path: "class-generator",
         name: "Class generator",
         component: ClassGenerator,
+      },
+      {
+        path: "user",
+        name: "User",
+        component: UserProfile,
       }
     ],
   },
